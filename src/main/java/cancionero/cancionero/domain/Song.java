@@ -2,10 +2,21 @@ package cancionero.cancionero.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Document(collection = "Cancion")
 public class Song {
 
@@ -16,8 +27,8 @@ public class Song {
     private List<Chord> chordList;
     private String tonality;
 
-    public Song(String songName, String tonality, String singerName){
-
+    public Song(Integer songId, String songName, String tonality, String singerName){
+        this.songId = songId;
         this.songName = songName;
         this.tonality = tonality;
         this.singerName = singerName;

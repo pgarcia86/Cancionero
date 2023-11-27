@@ -6,5 +6,5 @@ import cancionero.cancionero.domain.Notes;
 
 @Repository
 public interface NotesRepository extends MongoRepository<Notes, Integer>{
-    String getNoteName();
+    String findByNoteName(String noteName);
 }

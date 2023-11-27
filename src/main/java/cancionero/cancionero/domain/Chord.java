@@ -13,16 +13,16 @@ public class Chord {
         this.notesList = new ArrayList<Notes>();
     }
 
-    private String getChordName(){
+    public String getChordName(){
         return this.chordName;
     }
-    private List<Notes> getNotesList(){
+    public List<Notes> getNotesList(){
         return this.notesList;
     }
-    private void setChordName(String chordName){
+    public void setChordName(String chordName){
         this.chordName = chordName;
     }
-    private void setNotesList(List<Notes> notesList){
+    public void setNotesList(List<Notes> notesList){
         this.notesList = notesList;
     }    
 }

@@ -11,16 +11,15 @@ import cancionero.cancionero.domain.Song;
 @Repository
 public interface SongRepository extends MongoRepository<Song, Integer>{
     
-    List<Song> getSongsList();
+    List<Song> findAll();
     List<Song> getSongsByTonality(String tonality);
     List<Song> getTonalityBySongName(String name);
-    List<Song> getSongBySinger(String singerName);
+    List<Song> getSongBySingerName(String singerName);
 
-    Song getSongByName(String name);
-    Song getSongById(Integer id);
+    Song getSongBySongName(String name);
+    Song getSongBySongId(Integer id);
 
     List<Chord> getChordsListBySongName(String songName);
     List<Chord> getChordListBySongId(Integer id);
-    
     
 }

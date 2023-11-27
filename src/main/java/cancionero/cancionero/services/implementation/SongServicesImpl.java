@@ -17,10 +17,26 @@ public class SongServicesImpl implements SongServices{
     @Autowired SongRepository songRepository;
 
     @Override
-    public List<SongDTO> getSongList() {
+    public SongDTO addNewSong(Song newSong) {
+        Song song = new Song(newSong.getSongId(), newSong.getSongName(), newSong.getTonality(), newSong.getSingerName());
+        songRepository.save(song);
+        return returnSongDTO(song);
+    }
+
+    @Override
+    public boolean existSongBySongId(Integer id) {
+        if (songRepository.existsById(id)){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List<SongDTO> getSongsList() {
         List<Song> songsList = songRepository.findAll();
         List<SongDTO> songDtos = new ArrayList<SongDTO>();
         for (Song song : songsList){
+            System.out.println(song);
             songDtos.add(returnSongDTO(song));
         }
         return songDtos;            
@@ -38,7 +54,7 @@ public class SongServicesImpl implements SongServices{
 
     @Override
     public List<SongDTO> getSongsBySinger(String singerName) {
-        List<Song> songsList = songRepository.getSongBySinger(singerName);
+        List<Song> songsList = songRepository.getSongBySingerName(singerName);
         List<SongDTO> songDTOList = new ArrayList<SongDTO>();
         for(Song song : songsList){
             songDTOList.add(returnSongDTO(song));
@@ -48,19 +64,19 @@ public class SongServicesImpl implements SongServices{
 
     @Override
     public String getTonalityBySongName(String songName){
-        Song songByName = songRepository.getSongByName(songName);
+        Song songByName = songRepository.getSongBySongName(songName);
         return songByName.getTonality();
     }
 
     @Override
     public SongDTO getSongByName(String songName) {
-        Song songByName = songRepository.getSongByName(songName);
+        Song songByName = songRepository.getSongBySongName(songName);
         return returnSongDTO(songByName);        
     }
 
     @Override
     public SongDTO getSongById(Integer id) {
-        Song songById = songRepository.getSongById(id);
+        Song songById = songRepository.getSongBySongId(id);
         return returnSongDTO(songById);
     }
 
@@ -77,20 +93,15 @@ public class SongServicesImpl implements SongServices{
         throw new UnsupportedOperationException("Unimplemented method 'getTonality'");
     }
 
-
-
     public SongDTO returnSongDTO(Song song) {
 
         SongDTO songDTO = new SongDTO();
         songDTO.setSongId(song.getSongId());
+        songDTO.setSingerName(song.getSingerName());
         songDTO.setSongName(song.getSongName());
         songDTO.setTonality(song.getTonality());
         songDTO.setChordList(song.getChordList());
         return songDTO;
 
     }
-
-
-
-
 }

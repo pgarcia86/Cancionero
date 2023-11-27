@@ -8,10 +8,10 @@ public class Notes {
         this.noteName = noteName;
     }
 
-    private String getNoteName(){
+    public String getNoteName(){
         return this.noteName;    
     }
-    private void setNoteName(String noteName){
+    public void setNoteName(String noteName){
         this.noteName = noteName;
     }
 }

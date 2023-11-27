@@ -8,7 +8,6 @@ import cancionero.cancionero.domain.Notes;
 
 @Repository
 public interface ChordRepository extends MongoRepository<Chord, Integer>{
-    
-    String getChordName();
-    List<Notes> getNotesList();
+    List<Notes> findByNotesList();
+    String findByChordName(String chordName);
 }
