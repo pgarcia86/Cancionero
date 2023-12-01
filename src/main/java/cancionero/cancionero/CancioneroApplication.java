@@ -9,5 +9,4 @@ public class CancioneroApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CancioneroApplication.class, args);
 	}
-
 }

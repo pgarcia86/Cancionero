@@ -35,6 +35,14 @@ public class Song {
         this.chordList = new ArrayList<Chord>();
     }
 
+    public Song(Integer songId, String songName, List<Chord> chordList, String tonality, String singerName){
+        this.songId = songId;
+        this.songName = songName;
+        this.tonality = tonality;
+        this.singerName = singerName;
+        this.chordList = chordList;
+    }
+
     public Integer getSongId(){
         return this.songId;
     }

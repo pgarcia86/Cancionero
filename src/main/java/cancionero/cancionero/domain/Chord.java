@@ -1,17 +1,19 @@
 package cancionero.cancionero.domain;
 
-import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Chord {
 
     private String chordName;
     private List<Notes> notesList;
-
-    public Chord (String chordName){
-        this.chordName = chordName;
-        this.notesList = new ArrayList<Notes>();
-    }
 
     public String getChordName(){
         return this.chordName;

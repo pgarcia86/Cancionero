@@ -1,13 +1,13 @@
 package cancionero.cancionero.services.implementation;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import cancionero.cancionero.domain.Chord;
 import cancionero.cancionero.domain.Song;
-import cancionero.cancionero.domain.DAO_domain.ChordDTO;
 import cancionero.cancionero.domain.DAO_domain.SongDTO;
 import cancionero.cancionero.repository.SongRepository;
+import cancionero.cancionero.repository.implementation.CustomSongRepositoryImpl;
 import cancionero.cancionero.services.SongServices;
 import java.util.ArrayList;
 
@@ -15,10 +15,11 @@ import java.util.ArrayList;
 public class SongServicesImpl implements SongServices{
 
     @Autowired SongRepository songRepository;
+    @Autowired CustomSongRepositoryImpl customSongRepository; 
 
     @Override
     public SongDTO addNewSong(Song newSong) {
-        Song song = new Song(newSong.getSongId(), newSong.getSongName(), newSong.getTonality(), newSong.getSingerName());
+        Song song = new Song(newSong.getSongId(), newSong.getSongName(), newSong.getChordList(), newSong.getTonality(), newSong.getSingerName());
         songRepository.save(song);
         return returnSongDTO(song);
     }
@@ -63,6 +64,39 @@ public class SongServicesImpl implements SongServices{
     }
 
     @Override
+    public List<SongDTO> getSongByChordQuantity(Integer chordQuantity) {
+        List<Song> songsList = customSongRepository.getSongsByChordQuantity(chordQuantity);
+        List<SongDTO> songListDTO = new ArrayList<SongDTO>();
+        for(Song song : songsList){
+            songListDTO.add(returnSongDTO(song));
+        }
+        return songListDTO;
+    }
+
+    @Override
+    public List<SongDTO> getSongByChordQuantityMaxMin(Integer max, Integer min) {
+        List<Song> songsList = customSongRepository.getSongsByChordQuantityMaxMin(max, min);
+        List<SongDTO> songListDTO = new ArrayList<SongDTO>();
+        for(Song song : songsList){
+            songListDTO.add(returnSongDTO(song));
+        }
+        songListDTO.sort(null);
+        return songListDTO;
+    }
+
+    @Override
+    public String editChordList(Integer id, List<Chord> chordList) {
+        customSongRepository.editChordList(id, chordList);
+        return "Se edito la lista de canciones";
+    } 
+    
+    @Override
+    public String editSongTonalityById(Integer songId, String songTonality) {
+        customSongRepository.editSongTonalityById(songId, songTonality);
+        return "Se editó la tonalidad";
+    }
+
+    @Override
     public String getTonalityBySongName(String songName){
         Song songByName = songRepository.getSongBySongName(songName);
         return songByName.getTonality();
@@ -71,6 +105,7 @@ public class SongServicesImpl implements SongServices{
     @Override
     public SongDTO getSongByName(String songName) {
         Song songByName = songRepository.getSongBySongName(songName);
+        System.out.println(songByName);
         return returnSongDTO(songByName);        
     }
 
@@ -80,21 +115,28 @@ public class SongServicesImpl implements SongServices{
         return returnSongDTO(songById);
     }
 
-
     @Override
-    public List<ChordDTO> getChordsList() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getChordsList'");
+    public List<Chord> getChordsListBySongName(String songName) {
+        SongDTO songDTO = returnSongDTO(songRepository.getSongBySongName(songName));
+        return songDTO.getChordList();
     }
 
     @Override
-    public String getTonality() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTonality'");
+    public void deleteSongById(Integer id) {
+        songRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteSongBySongName(String name) {
+        songRepository.deleteById(songRepository.getSongBySongName(name).getSongId());
+    }
+
+    @Override
+    public void deleteSongsBySingerName(String singerName) {
+        songRepository.getSongBySingerName(singerName).forEach(song -> {songRepository.deleteById(song.getSongId());});
     }
 
     public SongDTO returnSongDTO(Song song) {
-
         SongDTO songDTO = new SongDTO();
         songDTO.setSongId(song.getSongId());
         songDTO.setSingerName(song.getSingerName());
@@ -102,6 +144,6 @@ public class SongServicesImpl implements SongServices{
         songDTO.setTonality(song.getTonality());
         songDTO.setChordList(song.getChordList());
         return songDTO;
-
     }
+
 }
